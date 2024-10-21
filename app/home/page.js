@@ -1,4 +1,5 @@
 import DashboardLayoutBranding from '../ui/components/Dashboard';
+import { GetAllListsByUser } from '../lib/data';
 
 export const metadata = {
     title: 'Home',
@@ -11,10 +12,14 @@ export const metadata = {
     },
   }
 
+  
+
 export default async function Page() {
+    const lists = await GetAllListsByUser({params: {userId: 1}});
+    // console.log(lists);
       return(
           <main>
-              <DashboardLayoutBranding></DashboardLayoutBranding>
+              <DashboardLayoutBranding data={lists}></DashboardLayoutBranding>
           </main>
           );
   }

@@ -1,4 +1,5 @@
 import NavBar from './ui/components/NavBar';
+
 import Button from '@mui/material/Button';
 
 export const metadata = {

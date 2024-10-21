@@ -4,13 +4,14 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import { createTheme } from '@mui/material/styles';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import ViewListIcon from '@mui/icons-material/ViewList';
 import PersonIcon from '@mui/icons-material/Person';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import Chip from '@mui/material/Chip';
 
-import CallIcon from '@mui/icons-material/Call';
 
+import { GetIncompItemsInList } from '../../lib/data';
 import ViewList from './ViewList';
 import NewList from './NewList';
 
@@ -27,23 +28,18 @@ const NAVIGATION = [
   },
   { kind: 'header', title: 'Your Lists' },  
   {kind: 'divider'},
-  {
-    segment: 'contacts',
-    title: 'Contacts',
-    icon: <PersonIcon />,
-    action: <Chip label={7} color="primary" size="small" />,
-  },
-  {
+];
+
+/*
+{
     segment: 'calls',
     title: 'Calls',
     icon: <CallIcon />,
-    
-  },
-      // children: CALLS_NAVIGATION,
+    // children: CALLS_NAVIGATION,
       // action: popoverMenuAction,
+  },
 
-
-];
+*/
 
 const demoTheme = createTheme({
   cssVariables: {
@@ -97,6 +93,22 @@ DemoPageContent.propTypes = {
 function DashboardLayoutBranding(props) {
   const { window } = props;
 
+  let temp = [...NAVIGATION];
+  const rows = props.data;
+  rows.map(async () => {
+    for (const row of rows) {
+      temp.push({segment: "lists/"+row.id,
+        title: row.title,
+        icon: <ViewListIcon />,
+        action: <Chip label={row.badge} color="secondary" size="small" />,
+      });
+    }
+    
+  });
+
+  const [navList, setNavList] = React.useState(temp);
+
+
   const [session, setSession] = React.useState({
     user: {
       name: 'Bharat Kashyap',
@@ -136,7 +148,7 @@ function DashboardLayoutBranding(props) {
     <AppProvider
       session={session}
       authentication={authentication}
-      navigation={NAVIGATION}
+      navigation={navList}
       branding={{
         logo: <img src="/images/logo.svg" alt="To-Do logo" />,
         title: 'To-Do',
